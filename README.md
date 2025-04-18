@@ -9,7 +9,7 @@
  - `Lucide-react for Icon`
 
 ### key Feature
-#### Dynamic Nested Navbar
-#### Footer
-#### Show Book Details
-#### Nested Routes
+- `Dynamic Nested Navbar`
+- `Footer`
+- `Show Book Details`
+- `Nested Routes`
