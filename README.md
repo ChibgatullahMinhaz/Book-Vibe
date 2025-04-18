@@ -1,8 +1,11 @@
 ## Books Vibes
 
 ##### `Welcome to our Books Vibes`
- ## Installation
-`npm i`
+
+
+Use the `npm install` command to install packages.
+Use the `npm run Dev` command to Run Server.
+
 
 ### Teach Stack
  - `React JS`
