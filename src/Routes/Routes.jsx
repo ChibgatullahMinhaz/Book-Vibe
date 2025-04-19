@@ -14,28 +14,15 @@ export const router = createBrowserRouter([
       {
         index: true,
         path: "/",
-        loader: () =>
-          fetch("/public/DB/booksData.json") ||
-          fetch(
-            "https://raw.githubusercontent.com/ProgrammingHero1/boi-poka-Book-Vibe-Resources/refs/heads/main/data/booksData.json"
-          ),
-        element: (
-          <Suspense fallback={ <Loader></Loader> }>
-            <Home></Home>
-          </Suspense>
-        ),
+        element: <Home></Home>
       },
       {
         path: "/Listed Books",
         element: <div>Listed Books</div>,
       },
       {
-        path: "/bookDetails/:bookId" ,
-        loader: () =>
-          fetch("/public/DB/booksData.json") ||
-          fetch(
-            "https://raw.githubusercontent.com/ProgrammingHero1/boi-poka-Book-Vibe-Resources/refs/heads/main/data/booksData.json"
-          ),
+        path: "/bookDetails/:bookId",
+        loader: () => fetch("booksData.json"),
         element: <BookDetail></BookDetail>,
       },
       {

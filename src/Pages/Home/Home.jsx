@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Books from '../Books/Books';
-import { useLoaderData } from 'react-router';
 import Banner from '../../Components/Banner/Banner';
+import { BooksContext } from '../../Components/Context/BooksContext';
 
 const Home = () => {
-  const books = useLoaderData();
+const {books} = useContext(BooksContext);
     return (
         <div>
             <Banner></Banner>

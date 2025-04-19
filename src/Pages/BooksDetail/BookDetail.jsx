@@ -5,7 +5,6 @@ const BookDetail = () => {
     const {bookId} = useParams();
     const books = useLoaderData();
     const book = books.find (book => book.bookId === parseInt(bookId))
-    console.log(book);
     const {image,author,bookName,review,tags,publisher,category,rating} = book;
 
     return (
