@@ -1,19 +1,24 @@
-import React, {  useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BooksContext } from "./BooksContext";
 
 const BookProvider = ({ children }) => {
   const [books, setBooks] = useState([]);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
-    fetch("booksData.json")
-      .then((res) => res.json())
-      .then((data) => setBooks(data));
-  }, []);
+      const fetchData = async ()=>{
+        const Res = await fetch("booksData.json");
+        const Data = await Res.json();
+        setBooks(Data);
+        setLoading(false);
+      }
+      fetchData()
+  }, [loading]);
 
   return (
     <BooksContext.Provider value={{ books, setBooks }}>
       {children}
     </BooksContext.Provider>
-  )
+  );
 };
 
 export default BookProvider;

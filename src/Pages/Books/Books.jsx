@@ -9,7 +9,7 @@ const Books = ({ books }) => {
       </h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-5 ">
         {Array.isArray(books) &&
-          books.map((book) => <Book book={book} key={book.bookId}></Book>)}
+          books?.map((book) => <Book book={book} key={book.bookId}></Book>)}
       </div>
     </div>
   );

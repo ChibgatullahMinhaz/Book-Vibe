@@ -5,6 +5,7 @@ import NotFound from "../Pages/NotFound/NotFound";
 import { Suspense } from "react";
 import Loader from "../Components/Loader/Loader";
 import BookDetail from "../Pages/BooksDetail/BookDetail";
+import BooksList from "../Pages/BookList/BooksList";
 
 export const router = createBrowserRouter([
   {
@@ -18,7 +19,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "/Listed Books",
-        element: <div>Listed Books</div>,
+        Component:BooksList ,
       },
       {
         path: "/bookDetails/:bookId",

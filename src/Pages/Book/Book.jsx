@@ -14,7 +14,7 @@ export const Book = ({book}) => {
        <div>
        <div className='flex justify-self-start gap-x-3 items-center my-2'>
        {tags.map((tag, index) => (
-          <span key={index} className='text-xs bg-red-100 rounded-xl p-1.5 text-red-500 font-semibold'>{tag}</span>
+          <span key={index} className='text-xs bg-red-100 rounded-xl p-1.5 text-red-500 font-semibold'>#{tag}</span>
         ))}
        </div>
        <h1 className='text-2xl font-bold'>{bookName}</h1>
