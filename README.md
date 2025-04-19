@@ -17,6 +17,7 @@ Use the `npm run Dev` command to Run Server.
  - `Reusable Utilities`
  - `LocalStorage`
  - ` react Toastify `
+ - ` Rechart `
 
 ### key Feature
 - `Dynamic Nested Navbar`

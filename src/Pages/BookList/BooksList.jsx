@@ -4,23 +4,32 @@ import "react-tabs/style/react-tabs.css";
 import { getData } from "../../Utilities/Utilites";
 import { BooksContext } from "../../Components/Context/BooksContext";
 import Card from "../../Components/Card/Card";
+import { ChevronDown } from "lucide-react";
+import { toast } from "react-toastify";
+import { sortingData } from "../../JavaScript/Sort/Sort";
+
 const BooksList = () => {
   const [sort, setSort] = useState("");
+  const [error, setError] = useState("");
   const [wishlist, setWishlist] = useState([]);
   const [readList, setReadList] = useState([]);
   const { books } = useContext(BooksContext);
 
   useEffect(() => {
-    const wishlistBooks = getData("WishList");
-    const numberOfWishlistBooksID = wishlistBooks.map(Number);
-
-    const filteingWishlist = () => {
-      const filteredWishlistBook = books.filter((book) =>
-        numberOfWishlistBooksID.includes(Number(book.bookId))
-      );
-      setWishlist(filteredWishlistBook);
-    };
-    filteingWishlist();
+    try {
+      const wishlistBooks = getData("WishList");
+      const numberOfWishlistBooksID = wishlistBooks.map(Number);
+      const filteingWishlist = () => {
+        const filteredWishlistBook = books.filter((book) =>
+          numberOfWishlistBooksID.includes(Number(book.bookId))
+        );
+        setWishlist(filteredWishlistBook);
+      };
+      filteingWishlist();
+    } catch (error) {
+      setError("error is", error);
+      toast(error);
+    }
   }, [books]);
 
   useEffect(() => {
@@ -37,7 +46,11 @@ const BooksList = () => {
     readBooks();
   }, [books]);
 
-  
+  const handleSort = (type) => {
+    setSort(type);
+    sortingData(type, readList, setReadList)
+    sortingData(type, wishlist, setWishlist)
+  };
 
   return (
     <div className={wishlist.length === 0 ? "min-h-screen" : ""}>
@@ -47,19 +60,29 @@ const BooksList = () => {
         </h1>
       </div>
       {/* shorting */}
-      <div className="dropdown">
-        <div tabIndex={0} role="button" className="btn m-1">
-          Sorted By:
+      <div className="dropdown flex justify-center mt-7  ">
+        <div
+          tabIndex={0}
+          role="button"
+          className="btn bg-[#23BE0A] text-white m-1"
+        >
+          Sorted By: {sort ? sort : <ChevronDown></ChevronDown>}
         </div>
         <ul
           tabIndex={0}
-          className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm"
+          className="dropdown-content menu bg-base-100 rounded-box z-1 mt-10 w-52 p-2 shadow-sm"
         >
           <li>
-            <a>Item 1</a>
+            <a onClick={() => handleSort("rating")}>Rating</a>
           </li>
           <li>
-            <a>Item 2</a>
+            <a onClick={() => handleSort("Acceding")}>A-Z</a>
+          </li>
+          <li>
+            <a onClick={() => handleSort("Deciding")}>Z-A</a>
+          </li>
+          <li>
+            <a onClick={() => handleSort("pages")}>pages</a>
           </li>
         </ul>
       </div>
