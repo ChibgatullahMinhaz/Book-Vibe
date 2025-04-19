@@ -5,6 +5,8 @@ import NotFound from "../Pages/NotFound/NotFound";
 import BookDetail from "../Pages/BooksDetail/BookDetail";
 import BooksList from "../Pages/BookList/BooksList";
 import ReadPage from "../Pages/ReadPage/ReadPage";
+import Login from "../Pages/Auth/Login";
+import SingUp from "../Pages/Auth/SingUp";
 
 export const router = createBrowserRouter([
   {
@@ -28,8 +30,18 @@ export const router = createBrowserRouter([
       {
         path: "/Pages to Read",
        Component: ReadPage,
-      },
+      }
+     
     ],
+    
+  },
+  {
+    path: '/login',
+    Component: Login
+  },
+  {
+    path: '/SingUp',
+    Component: SingUp
   },
   {
     path: "*",

@@ -26,6 +26,7 @@ Use the `npm run Dev` command to Run Server.
 - `Nested Routes`
 - `Show Toast`
 - `React Tabs for book list`
+- `Sorting`
 
 
 [Live Link](http://booksvibes.surge.sh/)

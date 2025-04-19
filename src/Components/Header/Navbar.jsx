@@ -5,6 +5,7 @@ import {
 } from "../../../src/JavaScript/NavLink/NavigationLink";
 import { NavLink } from "react-router";
 const Navbar = () => {
+
   const AuthLinks = authLinks.map((link, index) => (
     <NavLink key={index}
       className={
