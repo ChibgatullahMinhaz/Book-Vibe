@@ -2,10 +2,9 @@ import { createBrowserRouter } from "react-router";
 import App from "../App";
 import Home from "../Pages/Home/Home";
 import NotFound from "../Pages/NotFound/NotFound";
-import { Suspense } from "react";
-import Loader from "../Components/Loader/Loader";
 import BookDetail from "../Pages/BooksDetail/BookDetail";
 import BooksList from "../Pages/BookList/BooksList";
+import ReadPage from "../Pages/ReadPage/ReadPage";
 
 export const router = createBrowserRouter([
   {
@@ -28,7 +27,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "/Pages to Read",
-        element: <div>Pages to Read</div>,
+       Component: ReadPage,
       },
     ],
   },
