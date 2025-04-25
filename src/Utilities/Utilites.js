@@ -13,4 +13,15 @@ const storeBookById = (id, key) => {
 };
 
 
+export const getUser = () => {
+    const storedUser = localStorage.getItem('user');
+    return storedUser ? JSON.parse(storedUser) : null;
+}
+export const addUser = (user) => {
+    localStorage.setItem('user', JSON.stringify(user));
+}
+export const removeUser = ()=> {
+    localStorage.removeItem('user');
+}
+
 export { storeBookById as storeBook, getStoredData as getData }

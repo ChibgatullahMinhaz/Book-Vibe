@@ -4,18 +4,10 @@ import {
   navLinks,
 } from "../../../src/JavaScript/NavLink/NavigationLink";
 import { NavLink } from "react-router";
+import Login from "../../Pages/Auth/Login";
 const Navbar = () => {
 
-  const AuthLinks = authLinks.map((link, index) => (
-    <NavLink key={index}
-      className={
-        link.name === "LogIn" ? "btn bg-[#23BE0A] text-white font-bold" : "btn btn-secondary font-bold"
-      }
-      to={link.path}
-    >
-      {link.name}
-    </NavLink>
-  ));
+ 
   const Links = navLinks.map((link, index) => (
     <NavLink key={index} className="p-2 text-xl" to={link.path}>
       {link.name}
@@ -56,7 +48,10 @@ const Navbar = () => {
           {Links}
         </ul>
       </div>
-      <ul className="navbar-end space-x-4 ">{AuthLinks}</ul>
+      <ul className="navbar-end space-x-4 ">
+        <Login></Login>
+
+      </ul>
     </div>
   );
 };

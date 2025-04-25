@@ -1,74 +1,48 @@
-import { useState } from "react";
-import { NavLink } from "react-router";
-import Swal from "sweetalert2";
+import { GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
+import React, { useEffect, useState } from "react";
+import { auth } from "../../firebase/firebase.init";
+import { addUser, getUser, removeUser } from "../../Utilities/Utilites";
 
 const Login = () => {
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Form submitted:", formData);
-    Swal.fire({
-        title: 'Login Successful!',
-        text: 'You have logged in successfully.',
-        icon: 'success',
-        confirmButtonText: 'Ok'
+  const [user, setUser] = useState(null);
+  const provider = new GoogleAuthProvider();
+  const handleSignup = () => {
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        addUser(result)
+        const storedUser = getUser()
+        if (storedUser) {
+          setUser(storedUser.user);
+        }else{
+          setUser(null)
+        }
+      })
+      .catch((error) => {
+        console.log(error);
       });
   };
-
+  const handleLogOut = ()=> {
+    signOut(auth).then(()=> {
+      removeUser()
+      setUser(null)
+    }).catch(error=> {
+      console.log(error);
+    })
+  }
+ 
   return (
-    <div className="  min-h-screen w-1/3 mx-auto flex justify-center items-center">
-      <form onSubmit={handleSubmit} className="card-body  w-full shadow-2xl">
-        <fieldset className="fieldset">
-          <label className="label">Email</label>
-          <input
-            type="email"
-            name="email"
-            className="input"
-            placeholder="Email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
-
-          <label className="label">Password</label>
-          <input
-            type="password"
-            name="password"
-            className="input"
-            placeholder="Password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-          />
-
-          <div>
-            <a className="link link-hover">Forgot password?</a>
-          </div>
-          <p>
-            Don't Have Already Account please
-            <NavLink to="/SingUp">
-              <a className="link "> SingUp</a>
-            </NavLink>
-          </p>
-          <NavLink to="/">
-            <button type="submit" className="btn btn-neutral mt-4">
-              Login
-            </button>
-          </NavLink>
-        </fieldset>
-      </form>
+    <div>
+      {user ? (
+       <div className="flex gap-x-2 items-center">
+        <button className="cursor-pointer" onClick={handleLogOut}>
+        <img src={user.photoURL} className=" rounded-full h-10 w-10"/>
+        </button>
+        </div>
+      ) : (
+        <button className="btn btn-primary" onClick={handleSignup}>
+          SingUp
+        </button>
+      )}
     </div>
   );
 };
