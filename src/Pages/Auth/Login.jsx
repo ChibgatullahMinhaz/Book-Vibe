@@ -9,34 +9,42 @@ const Login = () => {
   const handleSignup = () => {
     signInWithPopup(auth, provider)
       .then((result) => {
-        addUser(result)
-        const storedUser = getUser()
+        addUser(result);
+        const storedUser = getUser();
         if (storedUser) {
           setUser(storedUser.user);
-        }else{
-          setUser(null)
         }
       })
       .catch((error) => {
         console.log(error);
       });
   };
-  const handleLogOut = ()=> {
-    signOut(auth).then(()=> {
-      removeUser()
-      setUser(null)
-    }).catch(error=> {
-      console.log(error);
-    })
-  }
- 
+  const handleLogOut = () => {
+    signOut(auth)
+      .then(() => {
+        removeUser();
+        const storedUser = getUser();
+        if (!storedUser) {
+          setUser(null);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  useEffect(() => {
+    const storedUser = getUser(); 
+    if (storedUser) {
+      setUser(storedUser.user); 
+    }
+  }, []);
   return (
     <div>
       {user ? (
-       <div className="flex gap-x-2 items-center">
-        <button className="cursor-pointer" onClick={handleLogOut}>
-        <img src={user.photoURL} className=" rounded-full h-10 w-10"/>
-        </button>
+        <div className="flex gap-x-2 items-center">
+          <button className="cursor-pointer" onClick={handleLogOut}>
+            <img src={user.photoURL} className=" rounded-full h-10 w-10" />
+          </button>
         </div>
       ) : (
         <button className="btn btn-primary" onClick={handleSignup}>
