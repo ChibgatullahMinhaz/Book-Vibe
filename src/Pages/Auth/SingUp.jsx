@@ -14,7 +14,6 @@ const SingUp = () => {
     const password = e.target.password.value;
     const photo = e.target.photo.value;
     const checked = e.target.terms.checked;
-    console.log(photo, password, name, email);
     if (!checked) {
       toast.warn("please Accept our terms and conditions");
       return;

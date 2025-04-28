@@ -1,19 +1,25 @@
-import React from "react";
-import {
-
-  navLinks,
-} from "../../../src/JavaScript/NavLink/NavigationLink";
+import React, { useContext } from "react";
+import { navLinks } from "../../../src/JavaScript/NavLink/NavigationLink";
 import { NavLink, Link } from "react-router";
-import Login from "../../Pages/Auth/Login";
+import { AuthContext } from "../../Context/FirebaseAuthContext";
+import { toast } from "react-toastify";
 
 const Navbar = () => {
+  const { user, logout } = useContext(AuthContext);
 
- 
   const Links = navLinks.map((link, index) => (
     <NavLink key={index} className="p-2 text-xl" to={link.path}>
       {link.name}
     </NavLink>
   ));
+
+  const handleLogout = ()=> {
+    logout().then(()=> {
+      toast.success('Sign-out successful.');
+    }).catch(error=> {
+      toast.error('something Wrong! Please Try Again')
+    })
+  }
   return (
     <div className="navbar  bg-base-100 shadow-sm">
       <div className="navbar-start">
@@ -50,11 +56,15 @@ const Navbar = () => {
         </ul>
       </div>
       <ul className="navbar-end space-x-4 ">
-   
-    
-    <Link to='/singUp' >
-    <button className='btn btn-primary' >SingUp</button>
-    </Link>
+        {user ? (
+          <>
+          <img onClick={handleLogout} className="h-8 w-8 rounded-full cursor-pointer" src={user.photoURL} alt={user.displayName} />
+          </>
+        ) : (
+          <Link to="/singUp">
+            <button className="btn btn-primary">SingUp</button>
+          </Link>
+        )}
       </ul>
     </div>
   );

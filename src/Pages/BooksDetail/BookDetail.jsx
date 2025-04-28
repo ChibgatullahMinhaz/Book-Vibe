@@ -1,12 +1,12 @@
 import React, { useContext } from "react";
-import {  useLoaderData, useParams } from "react-router";
+import { useLoaderData, useParams } from "react-router";
 import { BooksContext } from "../../Components/Context/BooksContext";
-import {  toast } from 'react-toastify';
+import { toast } from "react-toastify";
 import { storeBook } from "../../Utilities/Utilites";
+import { AuthContext } from "../../Context/FirebaseAuthContext";
 
 const BookDetail = () => {
-
-
+  const { user } = useContext(AuthContext);
   const { bookId } = useParams();
   const { books } = useContext(BooksContext);
   const books2 = useLoaderData();
@@ -17,8 +17,8 @@ const BookDetail = () => {
   const markAsReadBook = () => toast("One Book Added in Read List");
   const addWishlist = () => toast("One Book Added in Wishlist");
   if (!book) {
-    notify()
-    return ;
+    notify();
+    return;
   }
   const {
     author,
@@ -31,14 +31,22 @@ const BookDetail = () => {
     category,
     rating,
   } = book;
-  const handleStoreBook = (bookId)=>{
-    markAsReadBook()
-    storeBook(bookId, 'BookList')
-  }
-  const handleWishlistBook = (bookId)=>{
-    addWishlist()
-    storeBook(bookId, 'WishList')
-  }
+  const handleStoreBook = (bookId) => {
+    if (!user) {
+      toast.warn("Please Login");
+      return;
+    }
+    markAsReadBook();
+    storeBook(bookId, "BookList");
+  };
+  const handleWishlistBook = (bookId) => {
+    if (!user) {
+      toast.warn("Please Login");
+      return;
+    }
+    addWishlist();
+    storeBook(bookId, "WishList");
+  };
   return (
     <div className="hero min-h-screen lg:my-10 my-4 rounded-lg">
       <div className="hero-content flex-col lg:flex-row lg:items-center items-center">
@@ -89,10 +97,18 @@ const BookDetail = () => {
             </div>
           </div>
           <div className="space-x-6">
-            <button onClick={()=> handleStoreBook(bookId)} className="btn border-1 border-orange-300">
+            <button
+              onClick={() => handleStoreBook(bookId)}
+              className="btn border-1 border-orange-300"
+            >
               Mark As Read
             </button>
-            <button onClick={()=> handleWishlistBook(bookId)} className="btn bg-gray-400 text-white">Add Wishlist</button>
+            <button
+              onClick={() => handleWishlistBook(bookId)}
+              className="btn bg-gray-400 text-white"
+            >
+              Add Wishlist
+            </button>
           </div>
         </div>
       </div>

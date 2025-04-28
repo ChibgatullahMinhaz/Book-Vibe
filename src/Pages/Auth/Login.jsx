@@ -1,42 +1,61 @@
-import React, { useContext } from "react";
+import React, { useContext, useRef } from "react";
 import { AuthContext } from "../../Context/FirebaseAuthContext";
 import { Link, useNavigate } from "react-router";
-import { GithubAuthProvider, GoogleAuthProvider } from "firebase/auth";
+import { GithubAuthProvider, GoogleAuthProvider, sendPasswordResetEmail, signOut } from "firebase/auth";
 import { toast } from "react-toastify";
+import { auth } from "../../firebase/firebase.init";
 
 const Login = () => {
-  const {
-    creteUserWithGoogle,
-    createUserWithGithub,
-    userLogin,
-    sendVerificationEmail,
-    user,
-  } = useContext(AuthContext);
+  const emailRef = useRef();
+  const { creteUserWithGoogle, createUserWithGithub, userLogin, user } =
+    useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleSingIn = (e) => {
     e.preventDefault();
     const email = e.target.email.value;
     const password = e.target.password.value;
-    const verifyEmail = user.emailVerified;
-    if (user) {
-      if (!verifyEmail) {
-        toast.warn("Please verify Your email!");
-        return;
-      }
-    }
+
     userLogin(email, password)
-      .then(() => {
-        toast.success('login successful');
-        navigate('/')
+      .then((result) => {
+        const verifyEmail = result.user.emailVerified;
+        if (result.user) {
+          if (!verifyEmail) {
+            toast.warn("Please verify Your email!");
+            signOut(auth);
+            return;
+          }
+        }
+
+        toast.success("login successful");
+        navigate("/");
       })
       .catch((error) => {
-        toast(error.message);
+        const errorcode = error.code;
+        if (errorcode == "auth/user-not-found") {
+          toast.warning("Invalid User ! please Create An Account");
+        } else if (errorcode === "auth/wrong-password") {
+          toast.warning("Wrong Password");
+        } else if (errorcode === "auth/invalid-credential") {
+          toast.warn("Invalid email or password");
+        }
       });
   };
 
   const handleReset = () => {
-    console.log("clicked");
+    const email = emailRef.current.value
+   if (!email) {
+    toast.error('Please Enter Your Email');
+    return;
+   }
+   sendPasswordResetEmail(auth, email)
+   .then(()=> {
+    toast.success('we send email for reset password ');
+
+   }).catch(error=> {
+    const errorCode = error.code;
+    console.log(errorCode);
+   })
   };
 
   const handleLoginWithGithub = () => {
@@ -49,15 +68,9 @@ const Login = () => {
   const handleLoginWithGoogle = () => {
     creteUserWithGoogle(provider)
       .then((result) => {
-        sendVerificationEmail(result.user)
-          .then(() => {
-            toast.success("We send a Verification Email");
-          })
-          .catch((error) => {
-            toast.warn("something wrong", error.message);
-          });
         console.log(result);
         toast.success("User Login Successfully");
+        navigate("/");
       })
       .catch((error) => {
         toast.warning(error);
@@ -74,6 +87,7 @@ const Login = () => {
             className="input"
             placeholder="Email"
             autoComplete="email"
+            ref={emailRef}
           />
           <label className="label">Password</label>
           <input

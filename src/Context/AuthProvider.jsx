@@ -7,13 +7,14 @@ import {
   sendEmailVerification,
   signInWithEmailAndPassword,
   signInWithPopup,
+  signOut,
 } from "firebase/auth";
 import { auth } from "../firebase/firebase.init";
 import { toast } from "react-toastify";
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const { setLoading } = use(LoadingContext);
+  const { setLoading,loading } = use(LoadingContext);
 
   const createUser = (email, password) => {
     setLoading(true);
@@ -34,6 +35,9 @@ const AuthProvider = ({ children }) => {
     setLoading(true);
     return sendEmailVerification(currentUser);
   };
+  const logout = ()=> {
+    return signOut(auth)
+  }
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
@@ -42,15 +46,18 @@ const AuthProvider = ({ children }) => {
 
     });
   }, [setLoading]);
+  console.log(user);
 
   const userInfo = {
     user,
+    logout,
     createUser,
     createUserWithGithub,
     setLoading,
     creteUserWithGoogle,
     sendVerificationEmail,
     userLogin,
+    loading
   };
   return (
     <AuthContext.Provider value={userInfo}>{children}</AuthContext.Provider>
