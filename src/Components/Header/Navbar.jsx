@@ -1,10 +1,11 @@
 import React from "react";
 import {
-  authLinks,
+
   navLinks,
 } from "../../../src/JavaScript/NavLink/NavigationLink";
-import { NavLink } from "react-router";
+import { NavLink, Link } from "react-router";
 import Login from "../../Pages/Auth/Login";
+
 const Navbar = () => {
 
  
@@ -49,8 +50,11 @@ const Navbar = () => {
         </ul>
       </div>
       <ul className="navbar-end space-x-4 ">
-        <Login></Login>
-
+   
+    
+    <Link to='/singUp' >
+    <button className='btn btn-primary' >SingUp</button>
+    </Link>
       </ul>
     </div>
   );

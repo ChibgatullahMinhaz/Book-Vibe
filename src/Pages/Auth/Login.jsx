@@ -1,56 +1,54 @@
-import { GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
-import React, { useEffect, useState } from "react";
-import { auth } from "../../firebase/firebase.init";
-import { addUser, getUser, removeUser } from "../../Utilities/Utilites";
+import React, { use } from "react";
+import { AuthContext } from "../../Context/FirebaseAuthContext";
+import { Link } from "react-router";
 
 const Login = () => {
-  const [user, setUser] = useState(null);
-  const provider = new GoogleAuthProvider();
-  const handleSignup = () => {
-    signInWithPopup(auth, provider)
-      .then((result) => {
-        addUser(result);
-        const storedUser = getUser();
-        if (storedUser) {
-          setUser(storedUser.user);
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+  const { createUser } = use(AuthContext);
+  const handleSingIn = (e) => {
+    e.preventDefault();
+    const email = e.target.email.value;
+    const password = e.target.password.value;
+    console.log(email, password);
+    createUser(email, password)
   };
-  const handleLogOut = () => {
-    signOut(auth)
-      .then(() => {
-        removeUser();
-        const storedUser = getUser();
-        if (!storedUser) {
-          setUser(null);
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+  const handleReset = () => {
+    console.log("clicked");
   };
-  useEffect(() => {
-    const storedUser = getUser(); 
-    if (storedUser) {
-      setUser(storedUser.user); 
-    }
-  }, []);
   return (
-    <div>
-      {user ? (
-        <div className="flex gap-x-2 items-center">
-          <button className="cursor-pointer" onClick={handleLogOut}>
-            <img src={user.photoURL} className=" rounded-full h-10 w-10" />
+    <div className="card bg-base-100 w-full max-w-sm mx-auto shrink-0 shadow-2xl mt-10">
+      <div className="card-body">
+        <form className="fieldset" onSubmit={handleSingIn}>
+          <label className="label">Email</label>
+          <input
+            type="email"
+            name="email"
+            className="input"
+            placeholder="Email"
+            autoComplete="email"
+          />
+          <label className="label">Password</label>
+          <input
+            required
+            type="password"
+            pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+            title="Must be more than 8 characters, including number, lowercase letter, uppercase letter"
+          
+            autoComplete="current-password"
+           name="password"
+            className="input"
+          placeholder="Password" />
+          <div>
+            <a onClick={handleReset} className="link link-hover">
+              Forgot password?
+            </a>
+          </div>
+          <br />
+          <p>Don't have an account? Create one now! <Link to='/singUp' className="text-blue-400 underline">SingUp</Link> </p>
+          <button type="submit" className="btn btn-neutral mt-4">
+            Login
           </button>
-        </div>
-      ) : (
-        <button className="btn btn-primary" onClick={handleSignup}>
-          SingUp
-        </button>
-      )}
+        </form>
+      </div>
     </div>
   );
 };
