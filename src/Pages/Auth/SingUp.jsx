@@ -1,11 +1,50 @@
-import React from "react";
-import { Link } from "react-router";
+import React, { useContext } from "react";
+import { Link, redirect, useNavigate } from "react-router";
+import { AuthContext } from "../../Context/FirebaseAuthContext";
+import { toast } from "react-toastify";
+import { updateProfile } from "firebase/auth";
 
 const SingUp = () => {
+  const { createUser, sendVerificationEmail } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const handleCreateAccount = (e) => {
+    e.preventDefault();
+    const name = e.target.name.value;
+    const email = e.target.email.value;
+    const password = e.target.password.value;
+    const photo = e.target.photo.value;
+    const checked = e.target.terms.checked;
+    console.log(photo, password, name, email);
+    if (!checked) {
+      toast.warn("please Accept our terms and conditions");
+      return;
+    }
+
+    createUser(email, password)
+      .then((result) => {
+        updateProfile(result.user, {
+          displayName: name,
+          photoURL: photo,
+        });
+        sendVerificationEmail(result.user)
+          .then(() => {
+            toast.success("We Send a Verification Mail");
+          })
+          .catch((error) => {
+            toast.warning("something wrong" + error.message);
+          });
+        navigate("/login");
+      })
+      .catch((error) => {
+        console.log(error.message);
+        toast.warning("You have Already an Account! Please Login");
+      });
+  };
+
   return (
     <div className="card bg-base-100 w-full max-w-sm mx-auto shrink-0 shadow-2xl mt-10">
       <div className="card-body">
-        <form className="fieldset">
+        <form className="fieldset" onSubmit={handleCreateAccount}>
           <label className="label">Name</label>
           <input
             type="text"
@@ -105,7 +144,7 @@ const SingUp = () => {
           <div className="flex gap-x-2">
             <input
               type="checkbox"
-              name="checked"
+              name="terms"
               className="checkbox checkbox-xs"
             />
             <p>Accept our terms and conditions</p>
