@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Link, redirect, useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { AuthContext } from "../../Context/FirebaseAuthContext";
 import { toast } from "react-toastify";
 import { updateProfile } from "firebase/auth";

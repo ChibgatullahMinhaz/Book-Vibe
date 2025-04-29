@@ -8,6 +8,7 @@ import ReadPage from "../Pages/ReadPage/ReadPage";
 import Login from "../Pages/Auth/Login";
 import SingUp from "../Pages/Auth/SingUp";
 import PrivetRoute from "../Routes/PrivetRoute";
+import { Profile } from "../Pages/Profile/Profile";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -30,11 +31,12 @@ export const router = createBrowserRouter([
       {
         path: "/PagesToRead",
        element: <PrivetRoute><ReadPage></ReadPage> </PrivetRoute>,
+      },
+      {
+        path: "/profile",
+       element: <PrivetRoute> <Profile></Profile> </PrivetRoute>,
       }
-     
-     
     ],
-    
   },
   {
     path: '/singUp',
