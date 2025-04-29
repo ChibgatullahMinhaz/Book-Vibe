@@ -1,6 +1,6 @@
 import React, { useContext, useRef } from "react";
 import { AuthContext } from "../../Context/FirebaseAuthContext";
-import { Link, useNavigate } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import { GithubAuthProvider, GoogleAuthProvider, sendPasswordResetEmail, signOut } from "firebase/auth";
 import { toast } from "react-toastify";
 import { auth } from "../../firebase/firebase.init";
@@ -10,6 +10,8 @@ const Login = () => {
   const { creteUserWithGoogle, createUserWithGithub, userLogin, user } =
     useContext(AuthContext);
   const navigate = useNavigate();
+  const location = useLocation()
+  console.log(location);
 
   const handleSingIn = (e) => {
     e.preventDefault();
@@ -28,7 +30,7 @@ const Login = () => {
         }
 
         toast.success("login successful");
-        navigate("/");
+        navigate( location?.state ||"/");
       })
       .catch((error) => {
         const errorcode = error.code;
@@ -70,7 +72,7 @@ const Login = () => {
       .then((result) => {
         console.log(result);
         toast.success("User Login Successfully");
-        navigate("/");
+        navigate( location?.state || "/");
       })
       .catch((error) => {
         toast.warning(error);

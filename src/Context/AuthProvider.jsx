@@ -46,7 +46,6 @@ const AuthProvider = ({ children }) => {
 
     });
   }, [setLoading]);
-  console.log(user);
 
   const userInfo = {
     user,
